@@ -29,7 +29,7 @@ export default function SignIn() {
   return (
     <main className="flex flex-col justify-center items-center min-h-screen">
       <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
-      <Card className="max-w-screen-sm w-[420px]">
+      <Card className="w-[420px]" bg="blackAlpha.600">
         <CardHeader className="text-3xl font-semibold text-center">
           What's your name?
         </CardHeader>
@@ -48,7 +48,22 @@ export default function SignIn() {
         <CardFooter className="w-full items-center flex justify-center">
           <Button
             onClick={() => handleSignIn()}
-            leftIcon={<CheckIcon />}
+            leftIcon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+                />
+              </svg>
+            }
             width={"300px"}
             height={"50px"}
           >

@@ -8,14 +8,5 @@ import Feed from "./feed";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { username } = useSession();
-
-  useEffect(() => {
-    console.log(username);
-    if (!username) {
-      document.location.href = "/sign-in";
-    }
-  }, []);
-
   return <Feed />;
 }
