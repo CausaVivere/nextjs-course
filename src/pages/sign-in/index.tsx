@@ -29,7 +29,7 @@ export default function SignIn() {
   return (
     <main className="flex flex-col justify-center items-center min-h-screen">
       <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
-      <Card className="w-[420px]" bg="blackAlpha.600">
+      <Card width={"420px"} bg="blackAlpha.600">
         <CardHeader className="text-3xl font-semibold text-center">
           What's your name?
         </CardHeader>

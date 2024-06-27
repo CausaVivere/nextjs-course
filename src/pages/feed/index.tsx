@@ -75,6 +75,9 @@ export default function Feed() {
         <div className="absolute left-0 right-0 top-[-10%] h-[1000px] w-[1000px] rounded-full bg-[radial-gradient(circle_400px_at_50%_300px,#fbfbfb36,#000)]"></div>
       </div>
       <div className="min-w-screen w-full min-h-screen flex flex-col items-center justify-center">
+        <h1 className="pt-24 text-5xl font-bold text-transparent bg-gradient-to-br from-purple-700 to-indigo-300 bg-clip-text opacity-90">
+          ORION
+        </h1>
         <div className="flex flex-row gap-3 fixed top-3 right-3 items-center">
           <div className="text-xl">Signed in as {username ?? ""}</div>
           <Button
@@ -99,7 +102,7 @@ export default function Feed() {
             Sign Out
           </Button>
         </div>
-        <div className="relative flex flex-col items-center justify-center min-h-screen max-w-screen-lg w-full gap-5 mt-32">
+        <div className="relative flex flex-col items-center justify-center min-h-screen max-w-screen-lg w-full gap-5 mt-24">
           <CreatePost />
           {posts.map((post, i) => (
             <Post key={i} post={post} />
