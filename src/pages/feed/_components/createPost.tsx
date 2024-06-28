@@ -1,3 +1,4 @@
+import { useSession } from "@/pages/sign-in/_provider";
 import {
   Button,
   Card,
@@ -7,14 +8,30 @@ import {
   Divider,
   Textarea,
 } from "@chakra-ui/react";
+import { Post, Prisma } from "@prisma/client";
 import { useState } from "react";
 
-export default function CreatePost() {
+export default function CreatePost({
+  setPosts,
+}: {
+  setPosts: React.Dispatch<
+    React.SetStateAction<Prisma.PostGetPayload<{ include: { likes: true } }>[]>
+  >;
+}) {
   const [loading, setLoading] = useState(true);
-  const [input, setInput] = useState("");
+  const { username } = useSession();
+  const [input, setInput] = useState<string>("");
 
   const handlePost = async () => {
-    // Call the API to create a post
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: input, username }),
+    });
+
+    const newPost: Post = await res.json();
+
+    setPosts((old) => [newPost, ...old]);
   };
 
   return (
@@ -32,7 +49,7 @@ export default function CreatePost() {
         />
       </CardBody>
       <CardFooter className="flex justify-end">
-        <Button onClick={() => handlePost} colorScheme="purple" width={"120px"}>
+        <Button onClick={handlePost} colorScheme="purple" width={"120px"}>
           Post
         </Button>
       </CardFooter>

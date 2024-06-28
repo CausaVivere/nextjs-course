@@ -9,51 +9,25 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "../sign-in/_provider";
 import { useEffect, useState } from "react";
-import Post from "./_components/post";
-import { post } from "@/types";
+import PostCard from "./_components/post";
 import CreatePost from "./_components/createPost";
+import { Prisma, type Post } from "@prisma/client";
 
 export default function Feed() {
   const { username, signOut } = useSession();
 
-  const [posts, setPosts] = useState<post[]>([
-    {
-      id: "1",
-      username: "John Cena",
-      content: "This is a test post.",
-      date: new Date(),
-      likes: 0,
-      commentsCount: 0,
-      sharesCount: 0,
-    },
-    {
-      id: "2",
-      username: "Mark Zuckerberg",
-      content: "This is a test post.",
-      date: new Date(),
-      likes: 32,
-      commentsCount: 234,
-      sharesCount: 3,
-    },
-    {
-      id: "3",
-      username: "Elon Musk",
-      content: "This is a test post.",
-      date: new Date(),
-      likes: 2323,
-      commentsCount: 5454,
-      sharesCount: 1222,
-    },
-    {
-      id: "4",
-      username: "Bill Gates",
-      content: "This is a test post.",
-      date: new Date(),
-      likes: 111,
-      commentsCount: 322,
-      sharesCount: 33,
-    },
-  ]);
+  useEffect(() => {
+    async function getFeed() {
+      await fetch("/api/posts")
+        .then((res) => res.json())
+        .then((data) => setPosts(data));
+    }
+    getFeed();
+  }, []);
+
+  const [posts, setPosts] = useState<
+    Prisma.PostGetPayload<{ include: { likes: true } }>[]
+  >([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -103,9 +77,9 @@ export default function Feed() {
           </Button>
         </div>
         <div className="relative flex flex-col items-center justify-center min-h-screen max-w-screen-lg w-full gap-5 mt-24">
-          <CreatePost />
+          <CreatePost setPosts={setPosts} />
           {posts.map((post, i) => (
-            <Post key={i} post={post} />
+            <PostCard key={i} post={post} />
           ))}
         </div>
       </div>

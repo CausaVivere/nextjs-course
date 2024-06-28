@@ -1,3 +1,4 @@
+import { useSession } from "@/pages/sign-in/_provider";
 import { post } from "@/types";
 import {
   Button,
@@ -7,16 +8,33 @@ import {
   CardHeader,
   Divider,
 } from "@chakra-ui/react";
+import type { Post, Prisma } from "@prisma/client";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Post({ post }: { post: post }) {
-  const [isLiked, setIsLiked] = useState(false);
+export default function Post({
+  post,
+}: {
+  post: Prisma.PostGetPayload<{ include: { likes: true } }>;
+}) {
+  const { username } = useSession();
+  const [isLiked, setLiked] = useState<boolean>(false);
+
+  function checkLike(): boolean {
+    return post?.likes?.some((like) => like.likedBy === username);
+  }
 
   const likePost = async () => {
-    // Call the API to like the post
-    setIsLiked(!isLiked);
+    const response = await fetch("/api/likes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ postId: post.id, username }),
+    });
   };
+
+  useEffect(() => {
+    setLiked(checkLike());
+  }, []);
 
   const commentPost = async () => {
     // Call the API to comment on the post
@@ -29,11 +47,11 @@ export default function Post({ post }: { post: post }) {
   return (
     <Card className="w-3/5 flex flex-col" bg={"blackAlpha.900"}>
       <CardHeader className="flex flex-row gap-3">
-        <h1 className="text-lg font-semibold">{post.username}</h1>
+        <h1 className="text-lg font-semibold">{post.user}</h1>
         <h1 className="text-lg font-light">
-          {moment(post.date).fromNow() +
+          {moment(post.createdAt).fromNow() +
             " - " +
-            moment(post.date).format("DD MMM YYYY")}
+            moment(post.createdAt).format("DD MMM YYYY")}
         </h1>
       </CardHeader>
       <Divider />
@@ -73,7 +91,7 @@ export default function Post({ post }: { post: post }) {
           onClick={likePost}
           width={"100%"}
         >
-          {post.likes}
+          {0}
         </Button>
         <Button
           leftIcon={
@@ -95,7 +113,7 @@ export default function Post({ post }: { post: post }) {
           onClick={commentPost}
           width={"100%"}
         >
-          {post.commentsCount}
+          {0}
         </Button>
         <Button
           leftIcon={
@@ -117,7 +135,7 @@ export default function Post({ post }: { post: post }) {
           onClick={sharePost}
           width={"100%"}
         >
-          <div>{post.sharesCount}</div>
+          <div>{0}</div>
         </Button>
       </CardFooter>
     </Card>
